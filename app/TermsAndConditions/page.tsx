@@ -19,8 +19,8 @@ const TermsAndConditions = () => {
       </p>
 
       <p className="mb-4">
-        <strong>Terminology:</strong> "You" refers to the person using this
-        website. "You" refers to the person using this website."Parties" refer
+        <strong>Terminology:</strong>  `You` refers to the person using this
+        website. `You` refers to the person using this website.`Parties` refer
         to both you and us. All terms are about the assistance we provide to
         you. Importantly, as of now, we do not charge any payment for our
         services.So, we will not responsible for any type of payment you to
