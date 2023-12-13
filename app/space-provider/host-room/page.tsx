@@ -119,12 +119,15 @@ const RegisterRoom = () => {
       formData.append('streetName', values.streetName);
       formData.append('spaceProviderIsLiving', values.spaceProviderIsLiving);
       formData.append('genderPreference', values.genderPreference);
-      formData.append('facility.water', values.facility.water);
-      formData.append('facility.bed', values.facility.bed);
-      formData.append('facility.chair', values.facility.chair);
-      formData.append('facility.table', values.facility.table);
-      formData.append('facility.fan', values.facility.fan);
-      formData.append('facility.clothesHanger', values.facility.clothesHanger);
+      formData.append('facility.water', values.facility.water.toString());
+      formData.append('facility.bed', values.facility.bed.toString());
+      formData.append('facility.chair', values.facility.chair.toString());
+      formData.append('facility.table', values.facility.table.toString());
+      formData.append('facility.fan', values.facility.fan.toString());
+      formData.append(
+        'facility.clothesHanger',
+        values.facility.clothesHanger.toString()
+      );
       formData.append('descriptionOfRoom', values.descriptionOfRoom);
       formData.append('rulesOfLiving', values.rulesOfLiving);
       formData.append('phone', values.phone);

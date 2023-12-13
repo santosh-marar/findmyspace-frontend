@@ -40,7 +40,7 @@ let chockName: string = '';
 export default function Home() {
   const dispatch = useAppDispatch();
 
-  const initialSpaceProvider = useAppSelector(
+  const initialSpaceProvider: any = useAppSelector(
     (state) => state.spaceProvider.initialSpaceProvider
   );
 
@@ -63,7 +63,7 @@ export default function Home() {
     }
   }, []);
 
-  const spaceProviderAvatar = initialSpaceProvider?.spaceProviderAvatar;
+  const spaceProviderAvatar: string = initialSpaceProvider?.spaceProviderAvatar;
   // console.log(spaceProviderAvatar);
 
   const form = useForm<FormValues>({
