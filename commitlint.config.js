@@ -13,7 +13,7 @@
 // security: 'Changes related to security',
 // changeset: 'Changes related to versioning and changeset integration'
 // eslint-disable-next-line import/no-anonymous-default-export
-export default {
+module.exports = {
   extends: ['@commitlint/config-conventional'],
   rules: {
     'body-leading-blank': [1, 'always'],
@@ -51,5 +51,6 @@ export default {
         'changeset',
       ],
     ],
+    'scope-empty': [2, 'never'],
   },
 };

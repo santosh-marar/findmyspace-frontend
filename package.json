@@ -29,6 +29,7 @@
     "clsx": "^2.0.0",
     "cookies-next": "4.1.0",
     "date-fns": "2.30.0",
+    "js-cookie": "3.0.5",
     "lucide-react": "^0.279.0",
     "next": "latest",
     "react": "latest",
@@ -43,8 +44,8 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.7.2",
-    "@commitlint/config-conventional": "^17.7.0",
+    "@commitlint/cli": "18.4.3",
+    "@commitlint/config-conventional": "18.4.3",
     "@types/js-cookie": "3.0.6",
     "@types/node": "latest",
     "@types/react": "latest",

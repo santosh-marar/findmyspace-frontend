@@ -212,50 +212,56 @@ export default function Home() {
         <p>Total rooms: {totalRooms}</p>
       </div>
 
-      <div className="container flex flex-col gap-4 md:gap-8 items-center justify-center pb-8 md:pb-8">
-        {rooms?.map((room: any) => {
-          const {
-            _id,
-            roomImages,
-            price,
-            district,
-            city,
-            chockName,
-            genderPreference,
-            nearPopularPlaceName,
-            descriptionOfRoom,
-            rules,
-          } = room;
-          return (
-            <RoomsComponent
-              key={_id}
-              id={_id}
-              roomImages={roomImages}
-              price={price}
-              district={district}
-              city={city}
-              chockName={chockName}
-              genderPreference={genderPreference}
-              nearPopularPlaceName={nearPopularPlaceName}
-              descriptionOfRoom={descriptionOfRoom}
-              rules={rules}
-            />
-          );
-        })}
-
-        {/* <RoomsComponent /> */}
-        <div className="flex flex-col gap-1">
-          <span>
-            Hopes you are agree with these terms and conditions?{' '}
-            <Link
-              href="/TermsAndConditions"
-              className="text-blue-700 underline"
-            >
-              terms & conditions
-            </Link>{' '}
-          </span>
+      {isLoading ? (
+        <div className="container">
+          <p>loading...</p>
         </div>
-      </div>
+      ) : (
+        <div className="container flex flex-col gap-4 md:gap-8 items-center justify-center pb-8 md:pb-8">
+          {rooms?.map((room: any) => {
+            const {
+              _id,
+              roomImages,
+              price,
+              district,
+              city,
+              chockName,
+              genderPreference,
+              nearPopularPlaceName,
+              descriptionOfRoom,
+              rules,
+            } = room;
+            return (
+              <RoomsComponent
+                key={_id}
+                id={_id}
+                roomImages={roomImages}
+                price={price}
+                district={district}
+                city={city}
+                chockName={chockName}
+                genderPreference={genderPreference}
+                nearPopularPlaceName={nearPopularPlaceName}
+                descriptionOfRoom={descriptionOfRoom}
+                rules={rules}
+              />
+            );
+          })}
+
+          {/* <RoomsComponent /> */}
+          <div className="flex flex-col gap-1">
+            <span>
+              Hopes you are agree with these terms and conditions?{' '}
+              <Link
+                href="/TermsAndConditions"
+                className="text-blue-700 underline"
+              >
+                terms & conditions
+              </Link>{' '}
+            </span>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
