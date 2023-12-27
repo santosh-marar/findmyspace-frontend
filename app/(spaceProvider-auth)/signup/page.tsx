@@ -9,7 +9,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '@/constants/image';
-import { useRegisterMutation } from '@/redux/api/spaceProviderAuthApi';
+import {
+  useRegisterMutation,
+  useSpaceProviderAvatarGetPreSignedPostUrlMutation,
+} from '@/redux/api/spaceProviderAuthApi';
 import { isErrorWithMessage, isFetchBaseQueryError } from '@/redux/helpers';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IconAddressBook } from '@tabler/icons-react';
@@ -18,6 +21,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { v4 as uuidv4 } from 'uuid';
 import * as z from 'zod';
 
 const isValidNepaliPhoneNumber = (value: string): boolean => {
@@ -41,12 +45,15 @@ const formSchema = z.object({
   password: z.string().min(6, {
     message: 'At least 6 letter is required!',
   }),
-
-  image: z.custom<FileList>((val) => val instanceof FileList, 'Required'),
+  imageUrl: z.string().optional(),
+  image: z.custom(),
 });
 
 const SignUp = () => {
   const router = useRouter();
+
+  const [spaceProviderAvatarGetPreSignedPostUrl, { error: postDataError }] =
+    useSpaceProviderAvatarGetPreSignedPostUrlMutation();
 
   const [register, { data, error, isLoading }] = useRegisterMutation();
 
@@ -57,33 +64,68 @@ const SignUp = () => {
     },
   });
 
+  const handleUpload = async (values: any) => {
+    const image = values?.image[0];
+    if (!image) {
+      return null;
+    }
+
+    try {
+      const { type } = image;
+      const imageType = type.split('/')[1];
+      const imagePathAndType = `space-providers_avatar/${uuidv4()}${new Date()
+        .toISOString()
+        .replace(/[-:]/g, '-')}.${imageType}`;
+
+      const formDataToGetImageUrl = new FormData();
+      formDataToGetImageUrl.append('imagePathAndType', imagePathAndType);
+
+      const response = await spaceProviderAvatarGetPreSignedPostUrl(
+        formDataToGetImageUrl
+      ).unwrap();
+
+      const imageUrl = `${response?.url}/${imagePathAndType}`;
+      values.imageUrl = imageUrl;
+
+      try {
+        const res = await register(values).unwrap();
+
+        const formDataToPostImageUrl = new FormData();
+        Object.entries(response.fields).forEach(([key, value]) => {
+          formDataToPostImageUrl.append(key, value as string);
+        });
+
+        formDataToPostImageUrl.append('file', image);
+
+        try {
+          const res = await fetch(response.url, {
+            method: 'POST',
+            body: formDataToPostImageUrl,
+          });
+
+          router.push('/login');
+          return `image upload successfully`;
+        } catch (error) {
+          return error;
+        }
+      } catch (err: any) {
+        if (isFetchBaseQueryError(err)) {
+          const errMsg = 'error' in err ? err.error : JSON.stringify(err.data);
+          // enqueueSnackbar(errMsg, { variant: 'error' })
+          toast.error(errMsg);
+          // console.log(errMsg);
+        } else if (isErrorWithMessage(err)) {
+          toast.error(err.message);
+        }
+      }
+    } catch (err: any) {
+      return err;
+    }
+  };
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const formData = new FormData();
-      formData.append('fullName', values.fullName);
-      formData.append('image', values.image[0]);
-      formData.append('DOB', values.DOB);
-      formData.append('profession', values.profession);
-      formData.append('address.district', values.address.district);
-      formData.append('address.city', values.address.city);
-      formData.append('address.chockName', values.address.chockName);
-      formData.append('email', values.email);
-      formData.append('phone', values.phone);
-      formData.append('password', values.password);
-
-      const response = await register(formData).unwrap();
-      router.push('/login');
-    } catch (err: any) {
-      if (isFetchBaseQueryError(err)) {
-        const errMsg = 'error' in err ? err.error : JSON.stringify(err.data);
-        // enqueueSnackbar(errMsg, { variant: 'error' })
-        toast.error(errMsg);
-        // console.log(errMsg);
-      } else if (isErrorWithMessage(err)) {
-        toast.error(err.message);
-      }
-    }
+    const uploadResult = await handleUpload(values);
   }
 
   // Get current images value (always watched updated)

@@ -22,7 +22,6 @@ const DummySpaceProviderAvatar =
   'https://img.icons8.com/ios/100/user-male-circle--v1.png';
 
 const Profile = () => {
-  
   const spaceProviderInfo: any = useAppSelector(
     (state: any) => state.spaceProvider?.initialSpaceProvider
   );

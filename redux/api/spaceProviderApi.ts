@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import BASE_URL from '@/lib/api';
 import { setInitialSpaceProvider } from '../features/spaceProviderSlice';
 
-export const spaceProviderApi = createApi({
+export const spaceProviderApi: any = createApi({
   reducerPath: 'spaceProviderApi',
   tagTypes: ['MyRooms'],
   baseQuery: fetchBaseQuery({
@@ -62,6 +62,14 @@ export const spaceProviderApi = createApi({
         }
       },
     }),
+    roomImagesGetPreSignedPostUrl: builder.mutation({
+      query: (data) => ({
+        url: 'room/roomImagesGetPreSignedPostUrl',
+        method: 'POST',
+        body: data,
+        credentials: 'include',
+      }),
+    }),
     registerMyRoom: builder.mutation({
       query: (data) => ({
         url: `room/register`,
@@ -75,7 +83,6 @@ export const spaceProviderApi = createApi({
         meta,
         arg
       ) => {
-        // console.log(response.message)
         if (response) {
           toast.success(response?.message);
         }
@@ -88,5 +95,6 @@ export const {
   useMyProfileQuery,
   useMyRoomsQuery,
   useDeleteMyRoomMutation,
+  useRoomImagesGetPreSignedPostUrlMutation,
   useRegisterMyRoomMutation,
 } = spaceProviderApi;

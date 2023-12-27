@@ -16,6 +16,13 @@ export const spaceProviderAuthApi = createApi({
     credentials: 'include',
   }),
   endpoints: (builder) => ({
+    spaceProviderAvatarGetPreSignedPostUrl: builder.mutation({
+      query: (data) => ({
+        url: 'spaceProviderAvatarGetPreSignedPostUrl',
+        method: 'POST',
+        body: data,
+      }),
+    }),
     register: builder.mutation({
       query: (data) => ({
         url: 'register',
@@ -51,4 +58,8 @@ export const spaceProviderAuthApi = createApi({
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation } = spaceProviderAuthApi;
+export const {
+  useSpaceProviderAvatarGetPreSignedPostUrlMutation,
+  useRegisterMutation,
+  useLoginMutation,
+} = spaceProviderAuthApi;

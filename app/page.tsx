@@ -63,8 +63,11 @@ export default function Home() {
     }
   }, []);
 
-  const spaceProviderAvatar: string = initialSpaceProvider?.spaceProviderAvatar;
-  // console.log(spaceProviderAvatar);
+  let spaceProviderAvatar: string = initialSpaceProvider?.spaceProviderAvatar;
+  if (spaceProviderAvatar === undefined) {
+    spaceProviderAvatar =
+      'https://img.icons8.com/ios/100/user-male-circle--v1.png';
+  }
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),

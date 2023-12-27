@@ -1,11 +1,5 @@
 'use client';
-import {
-  ArrowLeft,
-  Bed,
-  BedDouble,
-  ChevronDownIcon,
-  Router,
-} from 'lucide-react';
+import { ArrowLeft, Bed, BedDouble, ChevronDownIcon } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -24,11 +18,16 @@ import { IconAddressBook, IconFriends } from '@tabler/icons-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
-import { useRegisterMyRoomMutation } from '@/redux/api/spaceProviderApi';
+import {
+  useRegisterMyRoomMutation,
+  useRoomImagesGetPreSignedPostUrlMutation,
+} from '@/redux/api/spaceProviderApi';
 import toast from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '@/constants/image';
 import { useRouter } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
+import { isErrorWithMessage, isFetchBaseQueryError } from '@/redux/helpers';
 
 const isValidNepaliPhoneNumber = (value: string): boolean => {
   const nepaliPhoneNumberRegex = /^[9]\d{9}$/; // 10-digit Nepali phone number regex starting with 9
@@ -81,10 +80,14 @@ const formSchema = z.object({
       (files) => files.every((file) => ALLOWED_IMAGE_TYPES.includes(file.type)),
       'Only these types are allowed .jpg, .jpeg, .png and .webp'
     ),
+  roomImagesUrl: z.string().array().optional(),
 });
 
 const RegisterRoom = () => {
   const router = useRouter();
+
+  const [roomImagesGetPreSignedPostUrl, { error: postDataError }] =
+    useRoomImagesGetPreSignedPostUrlMutation();
 
   const [registerMyRoom, { isLoading, error }] = useRegisterMyRoomMutation();
 
@@ -103,42 +106,84 @@ const RegisterRoom = () => {
     },
   });
 
+  const handleUpload = async (values: z.infer<typeof formSchema>) => {
+    const images = values?.image;
+    if (!images) {
+      return null;
+    }
+
+    try {
+      const roomImagePath = [];
+
+      for (let i = 0; i < images.length; i++) {
+        const image = images[i];
+        const { type } = image;
+        const imageType = type.split('/')[1];
+        const imagePathAndType = `room_images/${uuidv4()}${new Date()
+          .toISOString()
+          .replace(/[-:]/g, '-')}.${imageType}`;
+        roomImagePath.push(imagePathAndType);
+      }
+
+      // try {
+      let formDataToGetImageUrl = new FormData();
+      const promises = roomImagePath.map(async (value, index) => {
+        formDataToGetImageUrl.append(`imagePathAndType`, value);
+      });
+
+      const response = await roomImagesGetPreSignedPostUrl(
+        formDataToGetImageUrl
+      ).unwrap();
+
+      const roomImageAndPath: string[] = [];
+      let responseImageUrl: string = '';
+
+      for (let i = 0; i < response.length; i++) {
+        responseImageUrl = response[i].url;
+        let key = response[i].fields.key;
+        roomImageAndPath.push(`${responseImageUrl}/${key}`);
+      }
+      values.roomImagesUrl = roomImageAndPath;
+
+      try {
+        const res = await registerMyRoom(values).unwrap();
+
+        const promises = images.map((image: any, index: number) => {
+          const formDataToPostImageUrl = new FormData();
+
+          const respon = response[index];
+          responseImageUrl = respon?.url;
+          Object.entries(respon.fields).forEach(([key, value]) => {
+            formDataToPostImageUrl.append(key, value as string);
+          });
+
+          formDataToPostImageUrl.append('file', image);
+          return fetch(responseImageUrl, {
+            method: 'POST',
+            body: formDataToPostImageUrl,
+          });
+        });
+
+        await Promise.all(promises);
+        // router.push('/space-provider/my-profile');
+      } catch (err: any) {
+        if (isFetchBaseQueryError(err)) {
+          const errMsg = 'error' in err ? err.error : JSON.stringify(err.data);
+          // enqueueSnackbar(errMsg, { variant: 'error' })
+          toast.error(errMsg);
+          // console.log(errMsg);
+        } else if (isErrorWithMessage(err)) {
+          toast.error(err.message);
+        }
+      }
+    } catch (err: any) {
+      return err;
+    }
+  };
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // console.log(values.image);
-    try {
-      const formData = new FormData();
-      formData.append('district', values.district);
-      formData.append('image', values.image[0]);
-      formData.append('image', values?.image[1]);
-      formData.append('image', values?.image[2]);
-      formData.append('image', values?.image[3]);
-      formData.append('image', values?.image[4]);
-      formData.append('city', values.city);
-      formData.append('chockName', values.chockName);
-      formData.append('streetName', values.streetName);
-      formData.append('spaceProviderIsLiving', values.spaceProviderIsLiving);
-      formData.append('genderPreference', values.genderPreference);
-      formData.append('facility.water', values.facility.water.toString());
-      formData.append('facility.bed', values.facility.bed.toString());
-      formData.append('facility.chair', values.facility.chair.toString());
-      formData.append('facility.table', values.facility.table.toString());
-      formData.append('facility.fan', values.facility.fan.toString());
-      formData.append(
-        'facility.clothesHanger',
-        values.facility.clothesHanger.toString()
-      );
-      formData.append('descriptionOfRoom', values.descriptionOfRoom);
-      formData.append('rulesOfLiving', values.rulesOfLiving);
-      formData.append('phone', values.phone);
-      formData.append('price', values.price);
-      formData.append('nearPopularPlaceName', values.nearPopularPlaceName);
-
-      const response = await registerMyRoom(formData).unwrap();
-      router.push('/space-provider/my-profile');
-    } catch (err: any) {
-      toast.error(err?.message);
-    }
+    const uploadResult = await handleUpload(values);
   }
 
   // Get current images value (always watched updated)
