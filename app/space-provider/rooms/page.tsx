@@ -7,8 +7,7 @@ import Link from 'next/link';
 const Rooms = () => {
   const { isLoading, data } = useMyRoomsQuery(null);
   // console.log(data);
-  const rooms = data?.rooms;
-  // console.log(rooms)
+  const rooms = data?.room;
 
   return (
     <div className="h-full">
