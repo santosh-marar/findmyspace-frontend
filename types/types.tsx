@@ -10,3 +10,21 @@ export type RoomsComponentTypes = {
   descriptionOfRoom: string;
   rules: string;
 };
+
+export type ResponseMessageType = {
+  success: boolean;
+  message: string;
+};
+
+export interface spaceProviderTypes {
+  spaceProviderAvatar: string;
+  fullName: string;
+  phone: string;
+  email: string;
+  address: {
+    district: string;
+    city: string;
+    chockName: string;
+    nearPopularPlace: string;
+  };
+}

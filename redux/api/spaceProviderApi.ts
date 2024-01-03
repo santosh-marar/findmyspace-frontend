@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import toast from 'react-hot-toast';
 import BASE_URL from '@/lib/api';
 import { setInitialSpaceProvider } from '../features/spaceProviderSlice';
+import { ResponseMessageType } from '@/types/types';
 
 export const spaceProviderApi: any = createApi({
   reducerPath: 'spaceProviderApi',
@@ -97,4 +98,5 @@ export const {
   useDeleteMyRoomMutation,
   useRoomImagesGetPreSignedPostUrlMutation,
   useRegisterMyRoomMutation,
+  useLogoutMutation,
 } = spaceProviderApi;

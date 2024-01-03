@@ -2,13 +2,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import toast from 'react-hot-toast';
 import { spaceProviderApi } from './spaceProviderApi';
 import BASE_URL from '@/lib/api';
+import { ResponseMessageType } from '@/types/types';
 
-export type ResponseMessageType = {
-  success: boolean;
-  message: string;
-};
-
-export const spaceProviderAuthApi = createApi({
+export const spaceProviderAuthApi: any = createApi({
   reducerPath: 'spaceProviderAuthApi',
   refetchOnFocus: true,
   baseQuery: fetchBaseQuery({
@@ -55,6 +51,16 @@ export const spaceProviderAuthApi = createApi({
         toast.success(response?.message);
       },
     }),
+    logout: builder.mutation({
+      query: () => ({
+        url: 'logout',
+        method: 'POST',
+        credentials: 'include',
+      }),
+      transformResponse: (response: ResponseMessageType, meta, arg) => {
+        toast.success(response?.message);
+      },
+    }),
   }),
 });
 
@@ -62,4 +68,5 @@ export const {
   useSpaceProviderAvatarGetPreSignedPostUrlMutation,
   useRegisterMutation,
   useLoginMutation,
+  useLogoutMutation,
 } = spaceProviderAuthApi;

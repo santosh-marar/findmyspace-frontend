@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '@/constants/image';
+import { isValidNepaliPhoneNumber } from '@/lib/validation';
 import {
   useRegisterMutation,
   useSpaceProviderAvatarGetPreSignedPostUrlMutation,
@@ -23,11 +24,6 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
 import * as z from 'zod';
-
-const isValidNepaliPhoneNumber = (value: string): boolean => {
-  const nepaliPhoneNumberRegex = /^[9]\d{9}$/; // 10-digit Nepali phone number regex starting with 9
-  return nepaliPhoneNumberRegex.test(value);
-};
 
 const formSchema = z.object({
   fullName: z.string({ invalid_type_error: 'Full name is required' }),
@@ -138,7 +134,7 @@ const SignUp = () => {
       </Link>
 
       <div className="container md:h-5/6 flex flex-col gap-4 md:gap-8 items-center justify-center">
-        <h1 className="md:h1 h4 text-blue-700">Space-provider signup </h1>
+        <h1 className="md:h1 h4 text-blue-700">Space-provider Sign-up </h1>
         <div className="bg-white min-w-min min-h-min md:px-16 md:py-12 py-6 px-4 flex flex-col items-center justify-center rounded-lg border border-gray-300 mb-8">
           <div className="flex flex-col gap-8">
             <Form {...form}>

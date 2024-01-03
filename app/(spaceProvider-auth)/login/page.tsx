@@ -8,22 +8,16 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { isValidNepaliPhoneNumber } from '@/lib/validation';
 import { useLoginMutation } from '@/redux/api/spaceProviderAuthApi';
 import { isErrorWithMessage, isFetchBaseQueryError } from '@/redux/helpers';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import toast, { Toaster } from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
+import toast from 'react-hot-toast';
 import * as z from 'zod';
-
-const isValidNepaliPhoneNumber = (value: string): boolean => {
-  const nepaliPhoneNumberRegex = /^[9]\d{9}$/; // 10-digit Nepali phone number regex starting with 9
-  return nepaliPhoneNumberRegex.test(value);
-};
 
 const formSchema = z.object({
   phone: z.string().refine((value) => isValidNepaliPhoneNumber(value), {

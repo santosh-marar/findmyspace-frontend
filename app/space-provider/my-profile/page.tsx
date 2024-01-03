@@ -1,32 +1,32 @@
 'use client';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAppSelector } from '@/redux/hooks';
-
-interface spaceProviderTypes {
-  spaceProviderAvatar: string;
-  fullName: string;
-  phone: string;
-  email: string;
-  address: {
-    district: string;
-    city: string;
-    chockName: string;
-    nearPopularPlace: string;
-  };
-}
+import { useLogoutMutation } from '@/redux/api/spaceProviderAuthApi';
+import { useRouter } from 'next/navigation';
 
 const DummySpaceProviderAvatar =
   'https://img.icons8.com/ios/100/user-male-circle--v1.png';
 
 const Profile = () => {
+  const router = useRouter();
+
   const spaceProviderInfo: any = useAppSelector(
     (state: any) => state.spaceProvider?.initialSpaceProvider
   );
 
   const SpaceProviderAvatar = spaceProviderInfo?.spaceProviderAvatar;
+
+  const [logout, { isLoading }] = useLogoutMutation();
+
+  async function Logout() {
+    localStorage.removeItem('spaceProviderInfo');
+    await logout(null);
+    router.push('/');
+  }
+
   return (
     <div className="h-full">
       <Link href="/">
@@ -96,6 +96,13 @@ const Profile = () => {
             <p className="p-ui">{spaceProviderInfo?.address?.chockName}</p>
             <p className="p-ui">{spaceProviderInfo?.address?.streetName}</p>
           </div>
+          <Button
+            variant="destructive"
+            className="mt-4 flex gap-1"
+            onClick={() => Logout()}
+          >
+            Logout  <LogOut size={16}/>
+          </Button>
         </div>
       </div>
     </div>
