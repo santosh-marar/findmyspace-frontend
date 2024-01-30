@@ -29,12 +29,6 @@ export default function Carousel({ roomImages }: CarouselProps) {
         modules={[Navigation, Pagination, Mousewheel, Keyboard]}
         className="mySwiper w-full h-96 bg-white"
       >
-        {/* <SwiperSlide>Slide 1</SwiperSlide>
-        <SwiperSlide>Slide 2</SwiperSlide>
-        <SwiperSlide>Slide 3</SwiperSlide>
-        <SwiperSlide>Slide 4</SwiperSlide>
-        <SwiperSlide>Slide 5</SwiperSlide> */}
-
         {roomImages?.map((roomImage) => {
           return (
             <SwiperSlide key={roomImage}>

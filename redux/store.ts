@@ -4,6 +4,7 @@ import { roomsApi } from './api/roomApi';
 import { spaceProviderApi } from './api/spaceProviderApi';
 import { spaceProviderAuthApi } from './api/spaceProviderAuthApi';
 import spaceProviderAuthSlice from './features/spaceProviderSlice';
+import roomSlice from './features/room/roomSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     [spaceProviderAuthApi.reducerPath]: spaceProviderAuthApi.reducer,
     [spaceProviderApi.reducerPath]: spaceProviderApi.reducer,
     spaceProvider: spaceProviderAuthSlice,
+    room: roomSlice,
   },
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>

@@ -10,7 +10,7 @@ export const roomsApi = createApi({
   endpoints: (builder) => ({
     getRooms: builder.query<any, any>({
       query: (object) =>
-        `rooms?city=${object.city}&chockName=${object.chockName}`,
+        `rooms?city=${object.city}&chockName=${object.chockName}&page=${object.page}`,
     }),
     getRoomById: builder.query<any, string>({
       query: (id) => `room/${id}`,

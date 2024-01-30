@@ -28,3 +28,8 @@ export interface spaceProviderTypes {
     nearPopularPlace: string;
   };
 }
+
+export type FormValues = {
+  city: string;
+  chockName: string;
+};

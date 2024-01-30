@@ -5,13 +5,6 @@ interface AuthState {
   initialSpaceProvider: string | null;
 }
 
-// // const timeoutMilliseconds = 3888000000; //45 days
-// if (typeof window !== 'undefined') {
-//   setTimeout(() => {
-//     localStorage.removeItem('spaceProviderInfo');
-//   }, 5020800000);
-// }
-
 const initialState: AuthState = {
   initialSpaceProvider: null,
 };

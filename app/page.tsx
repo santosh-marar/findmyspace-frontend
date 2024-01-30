@@ -1,5 +1,5 @@
 'use client';
-import RoomsComponent from '@/components/custom/roomsCardComponent';
+import RoomsComponent from '@/components/custom/RoomsCardComponent';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Form,
@@ -14,13 +14,16 @@ import { useGetRoomsQuery } from '@/redux/api/roomApi';
 import { setInitialSpaceProvider } from '@/redux/features/spaceProviderSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight, ChevronDownIcon, Search } from 'lucide-react';
+import { ChevronDownIcon, Search } from 'lucide-react';
 import { Inter } from 'next/font/google';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import Pagination from '@/components/custom/Pagination';
+import { FormValues } from '@/types/types';
+import Avatar from '@/components/custom/Avatar';
+import RoomCardSkeleton from '@/components/custom/RoomCardSkeleton';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -29,16 +32,13 @@ const schema = z.object({
   chockName: z.string().optional(),
 });
 
-type FormValues = {
-  city: string;
-  chockName: string;
-};
-
 let city: string = '';
 let chockName: string = '';
 
 export default function Home() {
   const dispatch = useAppDispatch();
+
+  const page: number = useAppSelector((state) => state?.room?.page);
 
   const initialSpaceProvider: any = useAppSelector(
     (state) => state.spaceProvider.initialSpaceProvider
@@ -83,9 +83,14 @@ export default function Home() {
 
   // console.log(city, chockName);
 
-  const { isLoading, data, error } = useGetRoomsQuery({ city, chockName });
+  const { isLoading, data, error } = useGetRoomsQuery({
+    city,
+    chockName,
+    page,
+  });
   const rooms = data?.room;
   const totalRooms = data?.totalRooms;
+  const numberOfPages = data?.numberOfPages;
   // console.log(data?.totalRooms);
 
   return (
@@ -97,49 +102,10 @@ export default function Home() {
               fms.live
             </p>
           </div>
-          <div>
-            {initialSpaceProvider ? (
-              <Link
-                href="/space-provider/my-profile"
-                className="flex items-center justify-center md:gap-2"
-              >
-                <p className="flex justify-center text-blue-700">
-                  Host room
-                  <span>
-                    <ArrowRight />
-                  </span>
-                </p>
-                <Image
-                  className="rounded-full w-12 h-12  md:h-[75px] md:w-[75px]"
-                  src={`${spaceProviderAvatar}`}
-                  width={75}
-                  height={75}
-                  alt="Space-provider avatar"
-                />
-              </Link>
-            ) : (
-              <Link
-                href="/login"
-                className="flex items-center justify-center md:gap-2"
-              >
-                <p className="flex justify-center text-blue-700">
-                  Host room
-                  <span>
-                    <ArrowRight />
-                  </span>
-                </p>
-                <Image
-                  className="rounded-full w-12 h-12  md:h-[75px] md:w-[75px]"
-                  src={
-                    'https://img.icons8.com/ios/100/user-male-circle--v1.png'
-                  }
-                  width={75}
-                  height={75}
-                  alt="Space-provider avatar"
-                />
-              </Link>
-            )}
-          </div>
+          <Avatar
+            initialSpaceProvider={initialSpaceProvider}
+            spaceProviderAvatar={spaceProviderAvatar}
+          />
         </nav>
         <section
           className="bg-fit md:bg-contain w-full md:h-auto flex items-center justify-center py-24"
@@ -217,7 +183,7 @@ export default function Home() {
 
       {isLoading ? (
         <div className="container">
-          <p>loading...</p>
+          <p>Loading...</p>
         </div>
       ) : (
         <div className="container flex flex-col gap-4 md:gap-8 items-center justify-center pb-8 md:pb-8">
@@ -250,6 +216,8 @@ export default function Home() {
               />
             );
           })}
+
+          <Pagination page={page} numberOfPages={numberOfPages} />
 
           {/* <RoomsComponent /> */}
           <div className="flex flex-col gap-1">

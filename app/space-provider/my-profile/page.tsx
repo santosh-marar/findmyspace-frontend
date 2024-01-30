@@ -101,7 +101,7 @@ const Profile = () => {
             className="mt-4 flex gap-1"
             onClick={() => Logout()}
           >
-            Logout  <LogOut size={16}/>
+            Logout <LogOut size={16} />
           </Button>
         </div>
       </div>
