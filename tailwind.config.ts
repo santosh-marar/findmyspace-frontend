@@ -15,6 +15,9 @@ module.exports = {
         '2xl': '1400px',
       },
     },
+    corePlugins: {
+      aspectRatio: false,
+    },
     extend: {
       fontFamily: {
         sans: ['Inter'],
@@ -75,5 +78,8 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
 };

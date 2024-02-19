@@ -22,13 +22,16 @@ function RoomsComponent({
   return (
     <section className="bg-white rounded-md flex flex-col items-center w-[96%]">
       <section className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-16 w-full pb-4 md:pb-0 md:pr-4">
-        <Image
-          className="md:rounded-l-lg rounded-t-lg md:rounded-tr-none md:h-[296px] md:w-[478] h-40 w-78"
-          src={roomImage}
-          width={478}
-          height={296}
-          alt="room-image"
-        />
+
+        <div className="relative md:h-[296px] md:w-full h-[400px] w-[300px]">
+          <Image
+            className="md:rounded-l-lg rounded-t-lg md:rounded-tr-none"
+            src={roomImage}
+            alt="room image"
+            layout="fill"
+            objectFit="cover"
+          />
+        </div>
 
         <div className="room-detail w-72 md:w-96  flex flex-col gap-4">
           <span className="flex items-center font-bold gap-1">
@@ -48,9 +51,7 @@ function RoomsComponent({
                 <p>{genderPreference}</p>
                 <p>{nearPopularPlaceName}</p>
               </div>
-              <p className="body-font">
-                {descriptionOfRoom}
-              </p>
+              <p className="body-font">{descriptionOfRoom}</p>
             </div>
           </div>
           <div className="flex justify-end">

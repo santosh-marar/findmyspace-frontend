@@ -49,6 +49,7 @@
   "devDependencies": {
     "@commitlint/cli": "18.4.3",
     "@commitlint/config-conventional": "18.4.3",
+    "@tailwindcss/aspect-ratio": "0.4.2",
     "@types/js-cookie": "3.0.6",
     "@types/node": "latest",
     "@types/react": "latest",

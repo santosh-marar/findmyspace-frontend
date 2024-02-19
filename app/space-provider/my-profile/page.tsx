@@ -50,12 +50,12 @@ const Profile = () => {
             quality={100}
           />
           <div>
-            <p className="body-medium">Hello,</p>
+            <p className="body-font md:body-medium">Hello,</p>
             <h4 className="md:h1 h4 text-blue-700">
               {spaceProviderInfo?.fullName}
             </h4>
-            <p className="lead">{spaceProviderInfo?.email}</p>
-            <p className="lead">{spaceProviderInfo?.phone}</p>
+            <p className="md:lead">{spaceProviderInfo?.email}</p>
+            <p className="md:lead">{spaceProviderInfo?.phone}</p>
           </div>
         </div>
 
