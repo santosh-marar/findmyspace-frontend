@@ -8,13 +8,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '@/constants/image';
 import { isValidNepaliPhoneNumber } from '@/lib/validation';
 import {
   useRegisterMutation,
   useSpaceProviderAvatarGetPreSignedPostUrlMutation,
 } from '@/redux/api/spaceProviderAuthApi';
 import { isErrorWithMessage, isFetchBaseQueryError } from '@/redux/helpers';
+import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '@/constants/image';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IconAddressBook } from '@tabler/icons-react';
 import { ArrowLeft } from 'lucide-react';
@@ -42,8 +42,28 @@ const formSchema = z.object({
     message: 'At least 6 letter is required!',
   }),
   imageUrl: z.string().optional(),
-  image: z.custom(),
+  image: z.array(z.custom<File>())
+  .refine(
+    (files) => {
+      // Check if all items in the array are instances of the File object
+      return files.every((file) => file instanceof File);
+    },
+    {
+      // If the refinement fails, throw an error with this message
+      message: 'Expected a file',
+    }
+  )
+  .refine(
+    (files) => files.every((file) => file.size <= MAX_IMAGE_SIZE),
+    `File size should be less than 50mb.`
+  )
+  .refine(
+    (files) => files.every((file) => ALLOWED_IMAGE_TYPES.includes(file.type)),
+    'Only these types are allowed .jpg, .jpeg, .png and .webp'
+  ),
 });
+
+
 
 const SignUp = () => {
   const router = useRouter();

@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Toaster position="top-right" />
         <Providers>{children}</Providers>
-        <SpeedInsights />
+        {/* <SpeedInsights /> */}
         <Analytics />
         {/* <CookieConsent /> */}
       </body>

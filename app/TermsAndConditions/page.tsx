@@ -71,8 +71,9 @@ const TermsAndConditions = () => {
       <p>
         By using <span className="font-bold">FindMySpace.live</span>, you hereby
         consent to our Terms and Conditions and agree to its Privacy Policy. If
-        you have any questions about our Terms and Conditions, please{' '}
-        <span className="text-blue-500">contact us</span>.
+        you have any questions about our Terms and Conditions, please contact us on this email{' '}
+        <span className="text-blue-500">mararsantosh745@gmail.com</span>.
+        Developer of findmyspace.live. Thank you.
       </p>
     </div>
   );

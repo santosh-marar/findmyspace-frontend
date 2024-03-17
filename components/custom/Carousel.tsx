@@ -27,17 +27,18 @@ export default function Carousel({ roomImages }: CarouselProps) {
         mousewheel={true}
         keyboard={true}
         modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-        className="mySwiper w-full md:h-96 bg-white md:object-fill"
+        className="mySwiper w-full h-[400px] md:h-[448px] bg-white md:object-fill"
       >
         {roomImages?.map((roomImage) => {
           return (
             <SwiperSlide key={roomImage}>
               <Image
-                className="w-full object-contain"
                 src={roomImage}
-                width={150}
-                height={200}
+                fill
                 alt="room image"
+                style={{
+                  objectFit: 'cover',
+                }}
               />
             </SwiperSlide>
           );

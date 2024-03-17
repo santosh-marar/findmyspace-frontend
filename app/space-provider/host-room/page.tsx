@@ -392,7 +392,7 @@ const RegisterRoom = () => {
                                   </FormControl>
 
                                   <span className="block w-full p-2 text-center font-normal">
-                                    Girls Only
+                                    Females Only
                                   </span>
                                 </FormLabel>
                               </FormItem>
@@ -403,7 +403,7 @@ const RegisterRoom = () => {
                                   </FormControl>
 
                                   <span className="block w-full p-2 text-center font-normal">
-                                    Boys Only
+                                    Males Only
                                   </span>
                                 </FormLabel>
                               </FormItem>
@@ -417,7 +417,7 @@ const RegisterRoom = () => {
                                   </FormControl>
 
                                   <span className="block w-full p-2 text-center font-normal">
-                                    Family & Girls only
+                                    Family & Female only
                                   </span>
                                 </FormLabel>
                               </FormItem>

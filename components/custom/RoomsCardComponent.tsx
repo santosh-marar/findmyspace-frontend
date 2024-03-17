@@ -22,14 +22,16 @@ function RoomsComponent({
   return (
     <section className="bg-white rounded-md flex flex-col items-center w-[96%]">
       <section className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-16 w-full pb-4 md:pb-0 md:pr-4">
-
-        <div className="relative md:h-[296px] md:w-full h-[400px] w-[300px]">
+        <div className="relative md:h-[296px] md:w-full h-[300px] w-[100%]">
           <Image
             className="md:rounded-l-lg rounded-t-lg md:rounded-tr-none"
             src={roomImage}
             alt="room image"
-            layout="fill"
-            objectFit="cover"
+            quality={100}
+            fill
+            style={{
+              objectFit: 'cover',
+            }}
           />
         </div>
 
